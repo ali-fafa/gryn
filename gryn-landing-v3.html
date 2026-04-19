@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="es" data-lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="gryn. — El neobank de tu carrito. Gestiona tu salud nutricional como un activo. Lista de espera abierta."/>
+<meta property="og:title" content="gryn. — El neobank de tu carrito."/>
+<meta property="og:description" content="Escaneás. Gryn analiza. Tu cuerpo mejora. La primera plataforma que trata tu alimentación como un activo biológico."/>
+<meta property="og:image" content="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200"/>
+<title>gryn. — Nutrition Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════
+   TOKENS — GRYN DESIGN SYSTEM
+═══════════════════════════════════════════════════ */
+:root{
+  --void:#040407;
+  --deep:#07070E;
+  --surf:#0B0B16;
+  --lift:#111120;
+  --card:#0E0E1C;
+  --glass:rgba(255,255,255,.032);
+  --glass-h:rgba(255,255,255,.058);
+  --border:rgba(255,255,255,.065);
+  --border-m:rgba(255,255,255,.11);
+  --teal:#00E5CC;
+  --teal-10:rgba(0,229,204,.10);
+  --teal-18:rgba(0,229,204,.18);
+  --teal-glow:rgba(0,229,204,.28);
+  --neg:#FF5A5A;
+  --warn:#FFB347;
+  --pos:#00C25A;
+  --tx1:#FFFFFF;
+  --tx2:rgba(255,255,255,.56);
+  --tx3:rgba(255,255,255,.30);
+  --tx4:rgba(255,255,255,.13);
+  --tx5:rgba(255,255,255,.06);
+  --disp:'Bricolage Grotesque',sans-serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --r16:16px;--r20:20px;--r28:28px;
+}
+
+/* ═══ RESET ═══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background:var(--void);color:var(--tx1);
+  font-family:var(--body);-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;line-height:1.65;
+}
+img{display:block;max-width:100%;object-fit:cover}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:var(--body);border:none;outline:none;cursor:pointer;background:none}
+
+/* grain */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  opacity:.03;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ═══ UTILS ═══ */
+.container{max-width:1160px;margin:0 auto;padding:0 28px}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--teal);opacity:.82;display:block;
+}
+.teal{color:var(--teal)}
+
+/* ═══ REVEAL ═══ */
+[data-r]{
+  opacity:0;transform:translateY(40px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease);
+}
+[data-r].on{opacity:1;transform:none}
+[data-r][data-d='1']{transition-delay:.08s}
+[data-r][data-d='2']{transition-delay:.18s}
+[data-r][data-d='3']{transition-delay:.30s}
+[data-r][data-d='4']{transition-delay:.44s}
+[data-r][data-d='5']{transition-delay:.58s}
+
+/* ═══════════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════════ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:800;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 32px;
+  background:rgba(4,4,7,.7);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border-bottom:1px solid var(--border);
+  transition:background .35s,border-color .35s;
+}
+.nav.solid{background:rgba(4,4,7,.96);border-bottom-color:var(--border-m)}
+.nav-brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav-brand svg{filter:drop-shadow(0 0 14px rgba(0,229,204,.5))}
+.nav-wm{font-family:var(--disp);font-weight:800;font-size:20px;letter-spacing:-.045em}
+.nav-wm em{font-style:normal;color:var(--teal)}
+.nav-center{display:flex;align-items:center;gap:26px}
+.nav-center a{
+  font-size:13px;font-weight:500;color:var(--tx2);
+  letter-spacing:-.01em;transition:color .2s;
+}
+.nav-center a:hover{color:var(--tx1)}
+.nav-right{display:flex;align-items:center;gap:14px}
+
+/* Language Toggle */
+.lang-toggle{
+  display:flex;align-items:center;
+  background:var(--glass);border:1px solid var(--border-m);
+  border-radius:100px;padding:3px;gap:2px;
+}
+.lang-btn{
+  font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;
+  padding:5px 10px;border-radius:100px;
+  color:var(--tx3);transition:all .2s;
+}
+.lang-btn.active{
+  background:var(--teal);color:#040407;font-weight:700;
+}
+.nav-cta{
+  background:var(--teal);color:#040407;
+  font-weight:700;font-size:13px;letter-spacing:-.01em;
+  padding:9px 20px;border-radius:100px;
+  transition:transform .18s var(--spring),opacity .18s,box-shadow .18s;
+  box-shadow:0 0 0 0 var(--teal-glow);
+}
+.nav-cta:hover{
+  transform:scale(1.04);opacity:.92;
+  box-shadow:0 0 24px var(--teal-glow);
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+.hero{
+  position:relative;min-height:100dvh;
+  display:flex;flex-direction:column;justify-content:center;
+  overflow:hidden;padding-top:76px;
+}
+/* video/image background */
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{
+  width:100%;height:100%;object-fit:cover;object-position:center 35%;
+  filter:brightness(.22) saturate(1.15);
+  transform:scale(1.06);
+  animation:hzoom 22s ease-in-out infinite alternate;
+}
+@keyframes hzoom{from{transform:scale(1.06)}to{transform:scale(1.13)}}
+.hero-grad{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 100% 55% at 50% -5%,rgba(0,229,204,.11) 0%,transparent 55%),
+    linear-gradient(175deg,rgba(4,4,7,.05) 0%,rgba(4,4,7,.5) 55%,rgba(4,4,7,1) 100%),
+    linear-gradient(90deg,rgba(4,4,7,.5) 0%,transparent 35%,transparent 65%,rgba(4,4,7,.5) 100%);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,204,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,204,.022) 1px,transparent 1px);
+  background-size:68px 68px;
+  mask-image:radial-gradient(ellipse 75% 60% at 50% 20%,black,transparent 75%);
+}
+/* animated teal particles */
+.hero-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;border-radius:50%;
+  background:var(--teal);animation:pfloat linear infinite;
+}
+@keyframes pfloat{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:.6}
+  90%{opacity:.2}
+  100%{transform:translateY(-10vh) scale(.5);opacity:0}
+}
+
+.hero-inner{
+  position:relative;z-index:10;
+  max-width:1160px;margin:0 auto;padding:0 28px;
+  padding-top:48px;padding-bottom:80px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 15px;border-radius:100px;margin-bottom:34px;
+  background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.2);
+  font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.18em;
+}
+.hero-pulse{
+  width:6px;height:6px;border-radius:50%;background:var(--teal);
+  animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.75)}}
+.hero-h1{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(54px,8.8vw,116px);
+  line-height:.9;letter-spacing:-.05em;
+  max-width:860px;margin-bottom:28px;
+}
+.hero-h1 .hl{
+  display:block;
+  background:linear-gradient(135deg,var(--teal) 0%,rgba(0,229,204,.52) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{
+  font-size:clamp(15px,1.7vw,20px);color:var(--tx2);
+  max-width:500px;line-height:1.72;font-weight:300;margin-bottom:52px;
+}
+/* hero form */
+.hero-form{
+  display:flex;gap:8px;max-width:460px;
+  background:rgba(255,255,255,.052);
+  border:1px solid var(--border-m);border-radius:18px;padding:5px;
+  backdrop-filter:blur(18px);
+  transition:border-color .2s,box-shadow .2s;
+}
+.hero-form:focus-within{
+  border-color:rgba(0,229,204,.4);
+  box-shadow:0 0 0 3px rgba(0,229,204,.08);
+}
+.hero-input{
+  flex:1;background:transparent;color:var(--tx1);
+  font-size:14px;padding:12px 16px;letter-spacing:-.01em;
+}
+.hero-input::placeholder{color:var(--tx3);font-size:13.5px}
+.hero-btn{
+  background:var(--teal);color:#040407;
+  font-weight:700;font-size:13px;
+  padding:12px 22px;border-radius:13px;flex-shrink:0;
+  transition:transform .18s var(--spring),opacity .15s,box-shadow .18s;
+  box-shadow:0 2px 12px rgba(0,229,204,.25);
+}
+.hero-btn:hover{transform:scale(1.04);box-shadow:0 4px 24px rgba(0,229,204,.4)}
+.hero-meta{
+  margin-top:18px;font-size:12px;color:var(--tx3);
+  font-family:var(--mono);letter-spacing:.04em;
+}
+/* scroll indicator */
+.scroll-down{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:10;display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.scroll-line{
+  width:1px;height:42px;overflow:hidden;
+  background:rgba(255,255,255,.08);border-radius:1px;
+}
+.scroll-fill{
+  width:100%;height:50%;background:var(--teal);
+  animation:sdrop 2s ease-in-out infinite;transform-origin:top;
+}
+@keyframes sdrop{0%{transform:scaleY(0) translateY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(0) translateY(200%)};}
+.scroll-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--tx4);text-transform:uppercase}
+
+/* ═══════════════════════════════════════════════════
+   RIBBON — VALIDATED STATS
+═══════════════════════════════════════════════════ */
+.ribbon{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--surf);overflow:hidden;
+}
+.ribbon-track{
+  display:flex;width:max-content;
+  animation:rticker 32s linear infinite;
+}
+.ribbon-track:hover{animation-play-state:paused}
+@keyframes rticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ribbon-item{
+  display:flex;align-items:baseline;gap:10px;
+  padding:18px 48px;border-right:1px solid var(--border);
+  white-space:nowrap;flex-shrink:0;
+}
+.ri-val{font-family:var(--disp);font-weight:800;font-size:22px;color:var(--teal);letter-spacing:-.03em}
+.ri-lbl{font-size:13px;color:var(--tx2)}
+.ri-src{
+  font-family:var(--mono);font-size:9px;color:var(--tx4);
+  letter-spacing:.06em;align-self:center;
+  padding:2px 7px;border:1px solid var(--border);border-radius:100px;
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION SHARED
+═══════════════════════════════════════════════════ */
+section{padding:128px 0}
+.sec-h{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(36px,5vw,66px);
+  letter-spacing:-.04em;line-height:1.02;
+  margin:14px 0 22px;
+}
+.sec-p{font-size:17px;color:var(--tx2);line-height:1.78;font-weight:300;max-width:560px}
+.sec-center{text-align:center}
+.sec-center .sec-p{margin:0 auto}
+
+/* ═══════════════════════════════════════════════════
+   NEOBANK CONCEPT — SPLIT HERO SECTION
+═══════════════════════════════════════════════════ */
+.neobank{
+  background:var(--void);padding:128px 0;
+  position:relative;overflow:hidden;
+}
+.neobank::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:600px;height:600px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(0,229,204,.05) 0%,transparent 70%);
+}
+.neobank-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+.neobank-text .eyebrow{margin-bottom:18px}
+.neobank-h{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(36px,4.8vw,62px);
+  letter-spacing:-.04em;line-height:1.02;margin-bottom:24px;
+}
+.neobank-p{font-size:16px;color:var(--tx2);line-height:1.8;font-weight:300;margin-bottom:14px}
+.neobank-metrics{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:36px;
+}
+.nmet{
+  padding:22px 20px;border-radius:var(--r20);
+  background:var(--card);border:1px solid var(--border);
+  transition:border-color .25s,transform .25s var(--ease);
+}
+.nmet:hover{border-color:rgba(0,229,204,.22);transform:translateY(-3px)}
+.nmet-val{
+  font-family:var(--disp);font-weight:800;
+  font-size:28px;letter-spacing:-.04em;color:var(--teal);margin-bottom:4px;
+}
+.nmet-lbl{font-size:13px;color:var(--tx2);font-weight:400}
+
+/* ═══════════════════════════════════════════════════
+   WHOOP-STYLE CARDS — PHOTO BG WITH OVERLAY
+═══════════════════════════════════════════════════ */
+.features{background:var(--surf);padding:128px 0}
+.feat-intro{text-align:center;max-width:640px;margin:0 auto 80px}
+.cards-main{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card-tall{grid-row:span 2}
+
+/* PHOTO CARD BASE */
+.pcard{
+  position:relative;border-radius:var(--r28);overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .4s var(--ease),border-color .3s;
+}
+.pcard:hover{transform:translateY(-6px);border-color:rgba(0,229,204,.22)}
+.pcard-photo{
+  position:absolute;inset:0;
+  transition:transform .8s var(--ease);
+}
+.pcard:hover .pcard-photo{transform:scale(1.06)}
+.pcard-photo img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.28) saturate(1.2);
+}
+.pcard-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(170deg,rgba(0,229,204,.05) 0%,rgba(4,4,7,.5) 40%,rgba(4,4,7,.95) 100%);
+}
+.pcard-body{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:40px 36px;
+}
+.pcard-tall{min-height:560px}
+.pcard-short{min-height:260px}
+.pcard-icon{
+  width:52px;height:52px;border-radius:16px;margin-bottom:20px;
+  background:rgba(0,229,204,.1);border:1px solid rgba(0,229,204,.18);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  flex-shrink:0;
+  box-shadow:0 4px 16px rgba(0,229,204,.08);
+}
+.pcard-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--teal);opacity:.8;margin-bottom:10px;
+}
+.pcard-h{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(22px,2.8vw,32px);letter-spacing:-.03em;line-height:1.08;
+  margin-bottom:12px;
+}
+.pcard-p{font-size:14px;color:var(--tx2);line-height:1.72}
+/* teal accent line */
+.pcard::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.pcard:hover::after{opacity:.6}
+
+/* ═══════════════════════════════════════════════════
+   SAVINGS — NEOBANK DATA SECTION
+═══════════════════════════════════════════════════ */
+.savings{
+  background:var(--void);padding:128px 0;
+  position:relative;overflow:hidden;
+}
+.savings-bg-img{
+  position:absolute;right:0;top:0;width:48%;height:100%;z-index:0;
+}
+.savings-bg-img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(.18) saturate(1.1);
+}
+.savings-bg-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,var(--void) 0%,rgba(4,4,7,.6) 40%,rgba(4,4,7,.1) 100%);
+}
+.savings-inner{
+  position:relative;z-index:5;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.savings-stats{display:flex;flex-direction:column;gap:16px}
+.sstat{
+  display:flex;align-items:center;gap:20px;
+  padding:24px;border-radius:var(--r20);
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  transition:border-color .25s,background .25s;
+}
+.sstat:hover{border-color:rgba(0,229,204,.22);background:rgba(0,229,204,.04)}
+.sstat-num{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(32px,4vw,48px);letter-spacing:-.04em;color:var(--teal);
+  flex-shrink:0;min-width:100px;text-align:center;line-height:1;
+}
+.sstat-text{}
+.sstat-title{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+.sstat-desc{font-size:13px;color:var(--tx2);line-height:1.65}
+.sstat-src{
+  font-family:var(--mono);font-size:9px;color:var(--tx4);
+  letter-spacing:.06em;margin-top:6px;display:block;
+}
+
+/* ═══════════════════════════════════════════════════
+   HOW IT WORKS — HORIZONTAL STEPS
+═══════════════════════════════════════════════════ */
+.how{
+  background:var(--surf);padding:128px 0;
+  position:relative;
+}
+.how-steps{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:2px;margin-top:72px;border-radius:var(--r28);overflow:hidden;
+}
+.hstep{
+  padding:52px 38px;background:var(--card);
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.hstep:hover{background:rgba(0,229,204,.04)}
+.hstep::before{
+  content:attr(data-n);
+  position:absolute;top:20px;right:24px;
+  font-family:var(--disp);font-weight:800;font-size:80px;letter-spacing:-.04em;
+  color:rgba(0,229,204,.04);line-height:1;pointer-events:none;
+}
+.hstep-icon{
+  width:58px;height:58px;border-radius:18px;margin-bottom:26px;
+  background:var(--teal-10);border:1px solid rgba(0,229,204,.14);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+}
+.hstep-n{
+  font-family:var(--mono);font-size:10px;color:var(--tx4);
+  letter-spacing:.14em;margin-bottom:20px;
+}
+.hstep-title{
+  font-family:var(--disp);font-size:24px;font-weight:800;
+  letter-spacing:-.03em;margin-bottom:14px;
+}
+.hstep-desc{font-size:14px;color:var(--tx2);line-height:1.75}
+
+/* ═══════════════════════════════════════════════════
+   WAITLIST — FULL BLEED PHOTO + EMAIL CAPTURE
+═══════════════════════════════════════════════════ */
+.waitlist{
+  position:relative;padding:160px 0;overflow:hidden;
+}
+.wl-media{position:absolute;inset:0;z-index:0}
+.wl-media img{
+  width:100%;height:100%;object-fit:cover;object-position:center 38%;
+  filter:brightness(.18) saturate(1.05);
+}
+.wl-media::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 100%,rgba(0,229,204,.08) 0%,transparent 55%),
+    linear-gradient(to top,rgba(4,4,7,.98) 0%,rgba(4,4,7,.6) 50%,rgba(4,4,7,.55) 100%);
+}
+.wl-inner{
+  position:relative;z-index:10;
+  text-align:center;max-width:680px;margin:0 auto;padding:0 28px;
+}
+.wl-h{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(44px,7.5vw,96px);
+  letter-spacing:-.055em;line-height:.9;margin:18px 0 28px;
+}
+.wl-p{font-size:18px;color:var(--tx2);line-height:1.7;margin-bottom:52px;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto}
+.wl-form-wrap{max-width:480px;margin:0 auto 16px}
+.wl-form{
+  display:flex;gap:8px;
+  background:rgba(255,255,255,.048);
+  border:1px solid var(--border-m);border-radius:20px;padding:6px;
+  backdrop-filter:blur(24px);
+  transition:border-color .2s,box-shadow .2s;
+}
+.wl-form:focus-within{
+  border-color:rgba(0,229,204,.42);
+  box-shadow:0 0 0 3px rgba(0,229,204,.07),0 8px 40px rgba(0,0,0,.4);
+}
+.wl-input{
+  flex:1;background:transparent;color:var(--tx1);
+  font-size:15px;padding:14px 18px;letter-spacing:-.01em;
+}
+.wl-input::placeholder{color:var(--tx3);font-size:14px}
+.wl-btn{
+  background:var(--teal);color:#040407;
+  font-weight:700;font-size:14px;letter-spacing:-.01em;
+  padding:14px 28px;border-radius:14px;flex-shrink:0;
+  transition:transform .18s var(--spring),box-shadow .18s;
+  box-shadow:0 2px 16px rgba(0,229,204,.3);
+}
+.wl-btn:hover{transform:scale(1.04);box-shadow:0 4px 28px rgba(0,229,204,.45)}
+.wl-counter{
+  font-family:var(--mono);font-size:11px;color:var(--tx3);
+  letter-spacing:.06em;margin-bottom:28px;
+}
+.wl-counter strong{color:var(--teal)}
+.wl-note{font-size:12px;color:var(--tx4);font-family:var(--mono);letter-spacing:.05em}
+/* success state */
+.wl-success{
+  display:none;
+  padding:22px 36px;border-radius:var(--r20);
+  background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.25);
+  font-size:17px;font-weight:600;color:var(--teal);margin-top:24px;
+  animation:fadeUp .5s var(--ease) both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+/* list preview */
+.wl-list{
+  margin-top:24px;display:none;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:var(--r16);padding:14px 18px;
+  font-family:var(--mono);font-size:11px;color:var(--tx3);
+  text-align:left;max-height:120px;overflow-y:auto;
+}
+.wl-list.show{display:block}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer{
+  background:var(--deep);border-top:1px solid var(--border);
+  padding:60px 0 32px;
+}
+.foot-grid{
+  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;
+  gap:48px;margin-bottom:52px;
+}
+.foot-brand p{font-size:13px;color:var(--tx3);max-width:240px;line-height:1.7;margin-top:14px}
+.foot-col h4{
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:var(--tx4);text-transform:uppercase;margin-bottom:18px;
+}
+.foot-col a{
+  display:block;font-size:13px;color:var(--tx2);
+  margin-bottom:12px;letter-spacing:-.01em;transition:color .2s;
+}
+.foot-col a:hover{color:var(--teal)}
+.foot-bottom{
+  border-top:1px solid var(--border);padding-top:24px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--tx4);font-family:var(--mono);
+  flex-wrap:wrap;gap:12px;
+}
+.socials{display:flex;gap:10px}
+.soc{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--glass);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--tx2);transition:all .22s;
+}
+.soc:hover{background:var(--teal-10);border-color:rgba(0,229,204,.3);color:var(--teal)}
+
+/* ═══════════════════════════════════════════════════
+   PARTNERS TRUST
+═══════════════════════════════════════════════════ */
+.partners-trust{
+  padding:60px 0;
+  background:transparent;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+.partners-trust::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(0,229,204,.025) 0%,transparent 70%);
+}
+.pt-label{
+  font-family:var(--mono);font-size:10px;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);text-align:center;
+  margin-bottom:36px;display:block;
+}
+.pt-logos{
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(32px,6vw,72px);flex-wrap:wrap;
+}
+.pt-logo{
+  display:flex;align-items:center;gap:10px;
+  opacity:.4;
+  transition:opacity .6s var(--ease),filter .6s var(--ease);
+  cursor:default;
+}
+.pt-logo:hover{
+  opacity:1;
+  filter:drop-shadow(0 0 10px rgba(0,229,204,.35));
+}
+.pt-logo svg{flex-shrink:0}
+.pt-logo-name{
+  font-family:var(--mono);font-size:13px;font-weight:500;
+  letter-spacing:.04em;color:var(--tx1);
+  white-space:nowrap;
+}
+/* divider dots between logos */
+.pt-sep{
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(255,255,255,.15);flex-shrink:0;
+}
+@media(max-width:600px){
+  .pt-sep{display:none}
+  .pt-logos{gap:28px}
+}
+
+/* ═══════════════════════════════════════════════════
+   COUNT-UP NUMBERS
+═══════════════════════════════════════════════════ */
+.count-up{
+  font-family:var(--mono);display:inline-block;
+  /* fixed-width prevents layout shift during animation */
+  min-width:2ch;text-align:right;
+  transition:color .3s;
+}
+
+/* ═══ TOAST ═══ */
+#toast{
+  position:fixed;bottom:28px;left:50%;z-index:9999;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--lift);border:1px solid rgba(0,229,204,.3);
+  padding:12px 22px;border-radius:14px;font-size:14px;font-weight:600;
+  color:var(--teal);box-shadow:0 8px 40px rgba(0,0,0,.6);
+  opacity:0;transition:all .3s var(--ease);
+  pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media(max-width:1024px){
+  .neobank-grid,.savings-inner{grid-template-columns:1fr;gap:60px}
+  .savings-bg-img{display:none}
+  .cards-main{grid-template-columns:1fr}
+  .card-tall{grid-row:auto}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .how-steps{grid-template-columns:1fr}
+  .nav-center{display:none}
+  .nav-cta{display:none}
+  .neobank-metrics{grid-template-columns:1fr}
+  .hero-form,.wl-form{flex-direction:column;border-radius:16px;gap:6px}
+  .hero-btn,.wl-btn{border-radius:12px;width:100%;text-align:center}
+  section,.neobank,.savings,.features,.how,.waitlist{padding:88px 0}
+  .foot-grid{grid-template-columns:1fr}
+  .foot-bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════════ -->
+<nav class="nav" id="mainNav">
+  <a href="#" class="nav-brand" aria-label="gryn home">
+    <svg viewBox="0 0 34 34" width="32" height="32">
+      <path d="M8 30L17 13M26 30L17 13M17 13V4" stroke="#00E5CC" stroke-width="3.8" stroke-linecap="round"/>
+      <polygon points="17,0 12,7 22,7" fill="#00E5CC"/>
+    </svg>
+    <span class="nav-wm">gryn<em>.</em></span>
+  </a>
+
+  <nav class="nav-center" aria-label="primary">
+    <a href="#concepto" data-i18n="nav.concept">Concepto</a>
+    <a href="#beneficios" data-i18n="nav.benefits">Beneficios</a>
+    <a href="#ahorro" data-i18n="nav.savings">Ahorro</a>
+    <a href="#como" data-i18n="nav.how">Cómo funciona</a>
+  </nav>
+
+  <div class="nav-right">
+    <div class="lang-toggle" role="group" aria-label="language">
+      <button class="lang-btn active" data-lang-btn="es" onclick="setLang('es')" aria-pressed="true">ES</button>
+      <button class="lang-btn" data-lang-btn="en" onclick="setLang('en')" aria-pressed="false">EN</button>
+    </div>
+    <a href="#waitlist" class="nav-cta" data-i18n="nav.cta">Lista de espera →</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ -->
+<section class="hero" aria-label="hero">
+  <div class="hero-bg">
+    <img
+      src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1800&auto=format&fit=crop&q=82"
+      alt="Persona joven eligiendo productos frescos en supermercado moderno"
+      loading="eager"
+    />
+    <div class="hero-grad"></div>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="hero-particles" id="particles" aria-hidden="true"></div>
+
+  <div class="hero-inner container">
+    <div class="hero-badge" data-r>
+      <div class="hero-pulse"></div>
+      <span data-i18n="hero.badge">BETA ABIERTA · LISTA DE ESPERA</span>
+    </div>
+    <h1 class="hero-h1" data-r data-d="1">
+      <span data-i18n="hero.h1a">El neobank</span><br>
+      <span data-i18n="hero.h1b">de tu carrito.</span><br>
+      <span class="hl" data-i18n="hero.h1c">Tu salud, tu activo.</span>
+    </h1>
+    <p class="hero-sub" data-r data-d="2" data-i18n="hero.sub">
+      Gryn analiza cada producto que compras, calcula un score nutricional real y te muestra cómo optimizar tu cesta — más salud, menos gasto.
+    </p>
+    <div class="hero-form" data-r data-d="3">
+      <input class="hero-input" type="email" id="heroEmail" aria-label="Email" placeholder="tu@email.com" autocomplete="email"/>
+      <button class="hero-btn" onclick="handleSignup('heroEmail')" data-i18n="hero.btn">Acceso anticipado →</button>
+    </div>
+    <p class="hero-meta" data-r data-d="4" data-i18n="hero.meta">
+      Sin spam · Solo te avisamos cuando lancemos · Baja cuando quieras
+    </p>
+  </div>
+
+  <div class="scroll-down" aria-hidden="true">
+    <div class="scroll-line"><div class="scroll-fill"></div></div>
+    <span class="scroll-lbl">scroll</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+   RIBBON — VALIDATED STATS WITH CITATIONS
+═══════════════════════════════════════════════════ -->
+<div class="ribbon" aria-label="estadísticas validadas" role="marquee">
+  <div class="ribbon-track" id="ribbonTrack">
+    <!-- duplicated for seamless loop -->
+    <div class="ribbon-item"><span class="ri-val">68%</span><span class="ri-lbl" data-i18n="ribbon.1">ultraprocessados en el carrito medio español</span><span class="ri-src">AESAN 2022</span></div>
+    <div class="ribbon-item"><span class="ri-val">3.000+</span><span class="ri-lbl" data-i18n="ribbon.2">aditivos autorizados en la UE</span><span class="ri-src">EFSA 2023</span></div>
+    <div class="ribbon-item"><span class="ri-val">190€</span><span class="ri-lbl" data-i18n="ribbon.3">ahorro anual potencial optimizando el carrito</span><span class="ri-src">OCU 2023</span></div>
+    <div class="ribbon-item"><span class="ri-val">73%</span><span class="ri-lbl" data-i18n="ribbon.4">de los adultos no interpreta bien las etiquetas</span><span class="ri-src">EUFIC 2022</span></div>
+    <div class="ribbon-item"><span class="ri-val">NOVA 4</span><span class="ri-lbl" data-i18n="ribbon.5">categoría = mayor riesgo crónico documentado</span><span class="ri-src">Monteiro et al. 2019</span></div>
+    <div class="ribbon-item"><span class="ri-val">36%</span><span class="ri-lbl" data-i18n="ribbon.6">del presupuesto familiar va a comida procesada</span><span class="ri-src">INE 2022</span></div>
+    <!-- duplicate for infinite -->
+    <div class="ribbon-item"><span class="ri-val">68%</span><span class="ri-lbl" data-i18n="ribbon.1">ultraprocessados en el carrito medio español</span><span class="ri-src">AESAN 2022</span></div>
+    <div class="ribbon-item"><span class="ri-val">3.000+</span><span class="ri-lbl" data-i18n="ribbon.2">aditivos autorizados en la UE</span><span class="ri-src">EFSA 2023</span></div>
+    <div class="ribbon-item"><span class="ri-val">190€</span><span class="ri-lbl" data-i18n="ribbon.3">ahorro anual potencial optimizando el carrito</span><span class="ri-src">OCU 2023</span></div>
+    <div class="ribbon-item"><span class="ri-val">73%</span><span class="ri-lbl" data-i18n="ribbon.4">de los adultos no interpreta bien las etiquetas</span><span class="ri-src">EUFIC 2022</span></div>
+    <div class="ribbon-item"><span class="ri-val">NOVA 4</span><span class="ri-lbl" data-i18n="ribbon.5">categoría = mayor riesgo crónico documentado</span><span class="ri-src">Monteiro et al. 2019</span></div>
+    <div class="ribbon-item"><span class="ri-val">36%</span><span class="ri-lbl" data-i18n="ribbon.6">del presupuesto familiar va a comida procesada</span><span class="ri-src">INE 2022</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+   PARTNERS TRUST — Tecnología y datos respaldados
+═══════════════════════════════════════════════════ -->
+<div class="partners-trust" data-r>
+  <div class="container">
+    <span class="pt-label">Tecnología y datos respaldados por</span>
+    <div class="pt-logos">
+
+      <!-- Google Gemini -->
+      <div class="pt-logo" title="Google Gemini AI">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Google Gemini">
+          <defs>
+            <linearGradient id="gem-g" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+            </linearGradient>
+          </defs>
+          <!-- Gemini star shape — four-pointed star / sparkle -->
+          <path d="M14 2 C14 2 15.6 9.6 20 14 C15.6 18.4 14 26 14 26 C14 26 12.4 18.4 8 14 C12.4 9.6 14 2 14 2Z" fill="url(#gem-g)"/>
+          <path d="M2 14 C2 14 9.6 12.4 14 8 C18.4 12.4 26 14 26 14 C26 14 18.4 15.6 14 20 C9.6 15.6 2 14 2 14Z" fill="url(#gem-g)" opacity="0.6"/>
+        </svg>
+        <span class="pt-logo-name">Google Gemini</span>
+      </div>
+
+      <div class="pt-sep" aria-hidden="true"></div>
+
+      <!-- Open Food Facts -->
+      <div class="pt-logo" title="Open Food Facts — Base de datos nutricional abierta">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Open Food Facts">
+          <!-- Simplified fork + leaf icon -->
+          <rect x="4" y="3" width="3" height="10" rx="1.5" fill="white" opacity="0.9"/>
+          <rect x="11" y="3" width="3" height="10" rx="1.5" fill="white" opacity="0.9"/>
+          <path d="M4 13 Q7.5 16 11 13" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+          <rect x="6.5" y="14" width="3" height="11" rx="1.5" fill="white" opacity="0.9"/>
+          <!-- leaf right side -->
+          <path d="M17 5 Q24 7 24 14 Q24 21 17 22 Q17 14 17 5Z" fill="white" opacity="0.85"/>
+          <path d="M17 5 Q17 14 17 22" stroke="white" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.4"/>
+        </svg>
+        <span class="pt-logo-name">Open Food Facts</span>
+      </div>
+
+      <div class="pt-sep" aria-hidden="true"></div>
+
+      <!-- EFSA -->
+      <div class="pt-logo" title="European Food Safety Authority">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="EFSA">
+          <!-- Shield with EU-style star/check -->
+          <path d="M14 2L4 6V15C4 20.5 8.4 25.5 14 27C19.6 25.5 24 20.5 24 15V6L14 2Z" fill="white" opacity="0.12" stroke="white" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M9 14L12.5 18L19 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="pt-logo-name">EFSA</span>
+      </div>
+
+      <div class="pt-sep" aria-hidden="true"></div>
+
+      <!-- USDA FoodData -->
+      <div class="pt-logo" title="USDA FoodData Central">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="USDA FoodData">
+          <!-- Database cylinder icon -->
+          <ellipse cx="14" cy="7" rx="10" ry="4" fill="white" opacity="0.85"/>
+          <rect x="4" y="7" width="20" height="14" fill="white" opacity="0.1"/>
+          <path d="M4 7 L4 21 Q4 25 14 25 Q24 25 24 21 L24 7" stroke="white" stroke-width="1.5" fill="none"/>
+          <ellipse cx="14" cy="14" rx="10" ry="2.5" stroke="white" stroke-width="1" fill="none" opacity="0.5"/>
+        </svg>
+        <span class="pt-logo-name">USDA FoodData</span>
+      </div>
+
+      <div class="pt-sep" aria-hidden="true"></div>
+
+      <!-- CIQUAL / ANSES -->
+      <div class="pt-logo" title="CIQUAL — ANSES France">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="CIQUAL ANSES">
+          <!-- Microscope / science icon -->
+          <circle cx="14" cy="11" r="7" stroke="white" stroke-width="1.5" fill="none" opacity="0.85"/>
+          <line x1="14" y1="18" x2="14" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="9" y1="25" x2="19" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="14" cy="11" r="3" fill="white" opacity="0.7"/>
+        </svg>
+        <span class="pt-logo-name">CIQUAL / ANSES</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+   NEOBANK CONCEPT
+═══════════════════════════════════════════════════ -->
+<section class="neobank" id="concepto">
+  <div class="container">
+    <div class="neobank-grid">
+      <div class="neobank-text">
+        <span class="eyebrow" data-r data-i18n="neobank.eyebrow">El concepto</span>
+        <h2 class="neobank-h" data-r data-d="1">
+          <span data-i18n="neobank.h1">Tu cuerpo es</span><br>
+          <span data-i18n="neobank.h2">el activo más</span><br>
+          <span class="teal" data-i18n="neobank.h3">valioso que tienes.</span>
+        </h2>
+        <p class="neobank-p" data-r data-d="2" data-i18n="neobank.p1">
+          Los mejores inversores gestionan su portfolio con datos, estrategia y ciencia. Gryn hace lo mismo con tu alimentación. Trátala como lo que es: el activo biológico que determina tu energía, longevidad y rendimiento.
+        </p>
+        <p class="neobank-p" data-r data-d="3" data-i18n="neobank.p2">
+          No es una app de dietas. No hay planes, no hay restricciones, no hay culpa. Solo inteligencia nutricional en tiempo real — como tener un CFO para tu carrito.
+        </p>
+        <div class="neobank-metrics" data-r data-d="3">
+          <div class="nmet">
+            <div class="nmet-val">3 BD</div>
+            <div class="nmet-lbl" data-i18n="neobank.m1">Bases de datos científicas integradas</div>
+          </div>
+          <div class="nmet">
+            <div class="nmet-val">&lt;3s</div>
+            <div class="nmet-lbl" data-i18n="neobank.m2">Para analizar cualquier producto</div>
+          </div>
+          <div class="nmet">
+            <div class="nmet-val">100</div>
+            <div class="nmet-lbl" data-i18n="neobank.m3">Score único multi-fuente por producto</div>
+          </div>
+          <div class="nmet">
+            <div class="nmet-val">0€</div>
+            <div class="nmet-lbl" data-i18n="neobank.m4">Coste de la beta para los primeros accesos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHOOP-STYLE MINI DASHBOARD -->
+      <div data-r data-d="4">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:28px;padding:28px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,204,.07) 0%,transparent 70%);pointer-events:none"></div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+            <div>
+              <div style="font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--tx4);text-transform:uppercase;margin-bottom:4px" data-i18n="dash.title">ÍNDICE NUTRICIONAL</div>
+              <div style="font-family:var(--disp);font-size:28px;font-weight:800;letter-spacing:-.04em;color:var(--teal)" data-i18n="dash.status">Saludable</div>
+            </div>
+            <svg viewBox="0 0 90 90" width="90" height="90">
+              <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
+              <circle cx="45" cy="45" r="38" fill="none" stroke="#00E5CC" stroke-width="7" stroke-linecap="round"
+                stroke-dasharray="166 239" transform="rotate(-90 45 45)"
+                style="filter:drop-shadow(0 0 6px rgba(0,229,204,.5))"/>
+              <text id="dashRingScore" x="45" y="50" text-anchor="middle" font-family="DM Mono,monospace" font-size="18" font-weight="500" fill="white">0</text>
+              <text x="45" y="62" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.3)">/100</text>
+            </svg>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--lift);border-radius:14px;border:1px solid rgba(255,255,255,.04)">
+              <div style="width:34px;height:34px;border-radius:9px;background:#0D1A14;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🫒</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-i18n="dash.p1">AOVE Hacendado 1L</div>
+                <div style="font-size:10px;color:var(--tx3);font-family:var(--mono)">NOVA 1 · 0 aditivos</div>
+              </div>
+              <div style="font-family:var(--mono);font-size:16px;font-weight:500;color:#00E5CC;flex-shrink:0"><span class="count-up" data-target="92">0</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--lift);border-radius:14px;border:1px solid rgba(255,255,255,.04)">
+              <div style="width:34px;height:34px;border-radius:9px;background:#1A180D;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🌾</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-i18n="dash.p2">Alpro Avena 1L</div>
+                <div style="font-size:10px;color:var(--tx3);font-family:var(--mono)">NOVA 3 · 2 aditivos</div>
+              </div>
+              <div style="font-family:var(--mono);font-size:16px;font-weight:500;color:#FFB347;flex-shrink:0"><span class="count-up" data-target="76">0</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--lift);border-radius:14px;border:1px solid rgba(255,90,90,.12)">
+              <div style="width:34px;height:34px;border-radius:9px;background:#1A0D0D;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🥤</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-i18n="dash.p3">Refresco naranja</div>
+                <div style="font-size:10px;color:var(--tx3);font-family:var(--mono)">NOVA 4 · 6 aditivos</div>
+              </div>
+              <div style="font-family:var(--mono);font-size:16px;font-weight:500;color:#FF5A5A;flex-shrink:0"><span class="count-up" data-target="38">0</span></div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;padding:12px 16px;background:rgba(0,229,204,.06);border:1px solid rgba(0,229,204,.14);border-radius:12px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:11px;font-weight:700" data-i18n="dash.swap">Swap sugerido</div>
+              <div style="font-size:11px;color:var(--tx2);font-family:var(--mono)">Ahorra 0,82€ · Score +<span class="count-up" data-target="18">0</span> pts</div>
+            </div>
+            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal)">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+   FEATURE CARDS — WHOOP STYLE
+═══════════════════════════════════════════════════ -->
+<section class="features" id="beneficios">
+  <div class="container">
+    <div class="feat-intro">
+      <span class="eyebrow" data-r data-i18n="feat.eyebrow">Beneficios</span>
+      <h2 class="sec-h" data-r data-d="1" data-i18n="feat.h">Inteligencia real.<br>Resultados reales.</h2>
+      <p class="sec-p" data-r data-d="2" data-i18n="feat.p">Sin planes rígidos, sin culpa. Solo datos precisos que te dan el control.</p>
+    </div>
+
+    <div class="cards-main">
+      <!-- TALL CARD 1 — Scan -->
+      <div class="pcard pcard-tall card-tall" data-r>
+        <div class="pcard-photo">
+          <img
+            src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&auto=format&fit=crop&q=80"
+            alt="Persona escaneando producto con smartphone en supermercado"
+            loading="lazy"
+          />
+        </div>
+        <div class="pcard-grad"></div>
+        <div class="pcard-body pcard-tall" style="justify-content:flex-end">
+          <div class="pcard-icon">📸</div>
+          <div class="pcard-label" data-i18n="c1.label">Scan inteligente</div>
+          <h3 class="pcard-h" data-i18n="c1.h">Apunta.<br>Escanea.<br>Sabe.</h3>
+          <p class="pcard-p" data-i18n="c1.p">Código de barras o foto del ticket: Gemini Vision analiza el contenido en segundos. Gryn identifica marca, composición y nivel de procesamiento sin que muevas un dedo.</p>
+        </div>
+      </div>
+
+      <!-- SHORT CARD — Score -->
+      <div class="pcard pcard-short" data-r data-d="1">
+        <div class="pcard-photo">
+          <img
+            src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=900&auto=format&fit=crop&q=80"
+            alt="Mujer joven y saludable con bolsa de compra fresca"
+            loading="lazy"
+          />
+        </div>
+        <div class="pcard-grad"></div>
+        <div class="pcard-body pcard-short">
+          <div class="pcard-label" data-i18n="c2.label">Score científico</div>
+          <h3 class="pcard-h" data-i18n="c2.h">Un número.<br>Toda la verdad.</h3>
+          <p class="pcard-p" data-i18n="c2.p">OFF + USDA + CIQUAL. No un semáforo de marketing — ciencia de verdad en un score de 0 a 100.</p>
+        </div>
+      </div>
+
+      <!-- SHORT CARD — Savings -->
+      <div class="pcard pcard-short" data-r data-d="2">
+        <div class="pcard-photo">
+          <img
+            src="https://images.unsplash.com/photo-1518843875459-f738682238a6?w=900&auto=format&fit=crop&q=80"
+            alt="Pareja comprando frutas y verduras frescas en mercado"
+            loading="lazy"
+          />
+        </div>
+        <div class="pcard-grad"></div>
+        <div class="pcard-body pcard-short">
+          <div class="pcard-label" data-i18n="c3.label">Optimización de gasto</div>
+          <h3 class="pcard-h" data-i18n="c3.h">Más salud.<br>Menos coste.</h3>
+          <p class="pcard-p" data-i18n="c3.p">Alternativas mejores y más baratas cerca de ti. Comer bien no es un privilegio — es una decisión informada.</p>
+        </div>
+      </div>
+
+      <!-- TALL CARD 2 — Community -->
+      <div class="pcard pcard-tall card-tall" data-r data-d="1">
+        <div class="pcard-photo">
+          <img
+            src="https://images.unsplash.com/photo-1543168256-418811576931?w=900&auto=format&fit=crop&q=80"
+            alt="Mano sosteniendo smartphone con datos nutricionales en supermercado"
+            loading="lazy"
+          />
+        </div>
+        <div class="pcard-grad"></div>
+        <div class="pcard-body pcard-tall" style="justify-content:flex-end">
+          <div class="pcard-icon">🌐</div>
+          <div class="pcard-label" data-i18n="c4.label">Precios de comunidad</div>
+          <h3 class="pcard-h" data-i18n="c4.h">Tu barrio.<br>Tu precio.<br>Tu ventaja.</h3>
+          <p class="pcard-p" data-i18n="c4.p">Precios y alternativas de usuarios reales a menos de 2km. Comparativa de cestas de tu comunidad. Inteligencia colectiva al servicio de tu carrito.</p>
+        </div>
+      </div>
+
+      <!-- SHORT CARD — No data sells -->
+      <div class="pcard pcard-short" data-r data-d="3">
+        <div class="pcard-photo">
+          <img
+            src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=900&auto=format&fit=crop&q=80"
+            alt="Persona eligiendo productos frescos en supermercado moderno"
+            loading="lazy"
+          />
+        </div>
+        <div class="pcard-grad"></div>
+        <div class="pcard-body pcard-short">
+          <div class="pcard-label" data-i18n="c5.label">Privacidad total</div>
+          <h3 class="pcard-h" data-i18n="c5.h">Tus datos.<br>Solo tuyos.</h3>
+          <p class="pcard-p" data-i18n="c5.p">No vendemos información a marcas ni supermercados. Gryn cobra a ti — no por ti. Sin publicidad, sin compromisos ocultos.</p>
+        </div>
+      </div>
+
+      <!-- SHORT CARD — Fast -->
+      <div class="pcard pcard-short" data-r data-d="4">
+        <div class="pcard-photo">
+          <img
+            src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=900&auto=format&fit=crop&q=80"
+            alt="Vista superior de carrito de supermercado lleno de productos saludables"
+            loading="lazy"
+          />
+        </div>
+        <div class="pcard-grad"></div>
+        <div class="pcard-body pcard-short">
+          <div class="pcard-label" data-i18n="c6.label">Diseñado para tu ritmo</div>
+          <h3 class="pcard-h" data-i18n="c6.h">30 segundos<br>de decisión.</h3>
+          <p class="pcard-p" data-i18n="c6.p">Gen Z, Millennials, familias. Gryn cabe en el tiempo que tardas eligiendo entre dos productos en el pasillo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+   SAVINGS — NEOBANK DATA
+═══════════════════════════════════════════════════ -->
+<section class="savings" id="ahorro">
+  <div class="savings-bg-img">
+    <img
+      src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000&auto=format&fit=crop&q=80"
+      alt="Comida saludable y colorida sobre mesa de madera"
+      loading="lazy"
+    />
+  </div>
+  <div class="container">
+    <div class="savings-inner">
+      <div>
+        <span class="eyebrow" data-r data-i18n="sav.eyebrow">El impacto real</span>
+        <h2 class="sec-h" data-r data-d="1" data-i18n="sav.h">Lo que cuesta<br>no saber.</h2>
+        <p class="sec-p" data-r data-d="2" data-i18n="sav.p">Cada carrito sin analizar es dinero mal invertido y salud comprometida. Gryn convierte esa opacidad en claridad.</p>
+      </div>
+      <div class="savings-stats">
+        <div class="sstat" data-r>
+          <div class="sstat-num">190€</div>
+          <div class="sstat-text">
+            <div class="sstat-title" data-i18n="sav.s1t">Ahorro anual potencial</div>
+            <div class="sstat-desc" data-i18n="sav.s1d">Optimizando 3 productos por semana hacia alternativas equivalentes de menor coste y mejor score.</div>
+            <span class="sstat-src">Fuente: OCU Compra Maestra, 2023</span>
+          </div>
+        </div>
+        <div class="sstat" data-r data-d="1">
+          <div class="sstat-num">68%</div>
+          <div class="sstat-text">
+            <div class="sstat-title" data-i18n="sav.s2t">Productos ultraprocesados</div>
+            <div class="sstat-desc" data-i18n="sav.s2d">Del carrito medio español son NOVA 3-4. Cada punto de score ganado representa menos riesgo de enfermedad crónica.</div>
+            <span class="sstat-src">Fuente: AESAN — Encuesta Nacional de Alimentación, 2022</span>
+          </div>
+        </div>
+        <div class="sstat" data-r data-d="2">
+          <div class="sstat-num">73%</div>
+          <div class="sstat-text">
+            <div class="sstat-title" data-i18n="sav.s3t">Analfabetismo nutricional</div>
+            <div class="sstat-desc" data-i18n="sav.s3d">De adultos europeos no interpreta correctamente la información nutricional. Gryn cierra esa brecha.</div>
+            <span class="sstat-src">Fuente: EUFIC Food Literacy Report, 2022</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+   HOW IT WORKS
+═══════════════════════════════════════════════════ -->
+<section class="how" id="como">
+  <div class="container">
+    <div class="sec-center">
+      <span class="eyebrow" data-r data-i18n="how.eyebrow">Cómo funciona</span>
+      <h2 class="sec-h" data-r data-d="1" data-i18n="how.h">Tres pasos.<br>Un veredicto.</h2>
+      <p class="sec-p sec-center" data-r data-d="2" style="max-width:480px;margin:0 auto 0" data-i18n="how.p">Sin formularios, sin diarios de comida, sin pesarte. Solo apunta y dispara.</p>
+    </div>
+    <div class="how-steps" data-r data-d="2">
+      <div class="hstep" data-n="01">
+        <div class="hstep-n">01 / 03</div>
+        <div class="hstep-icon">📸</div>
+        <h3 class="hstep-title" data-i18n="how.s1h">Escanea</h3>
+        <p class="hstep-desc" data-i18n="how.s1p">Abre Gryn y apunta la cámara al código de barras de cualquier producto o haz una foto a tu ticket del super. Gemini Vision detecta automáticamente qué tipo de contenido es.</p>
+      </div>
+      <div class="hstep" data-n="02">
+        <div class="hstep-n">02 / 03</div>
+        <div class="hstep-icon">🧬</div>
+        <h3 class="hstep-title" data-i18n="how.s2h">Analiza</h3>
+        <p class="hstep-desc" data-i18n="how.s2p">Cruzamos con Open Food Facts, USDA FoodData y CIQUAL/ANSES. Calculamos el Score Gryn único: Nutriscore + grupo NOVA + densidad de aditivos en un solo número honesto.</p>
+      </div>
+      <div class="hstep" data-n="03">
+        <div class="hstep-n">03 / 03</div>
+        <div class="hstep-icon">💡</div>
+        <h3 class="hstep-title" data-i18n="how.s3h">Actúa</h3>
+        <p class="hstep-desc" data-i18n="how.s3p">Alternativas mejores y más baratas cerca de ti. Comparativa de precios de la comunidad. Visualización de cómo mejora tu índice con cada cambio. Tú decides.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+   WAITLIST — EMAIL CAPTURE WITH STORAGE
+═══════════════════════════════════════════════════ -->
+<section class="waitlist" id="waitlist">
+  <div class="wl-media">
+    <img
+      src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1800&auto=format&fit=crop&q=80"
+      alt="Mesa llena de verduras frescas y coloridas de mercado"
+      loading="lazy"
+    />
+  </div>
+  <div class="container">
+    <div class="wl-inner">
+      <span class="eyebrow" data-r data-i18n="wl.eyebrow">Lista de espera</span>
+      <h2 class="wl-h" data-r data-d="1">
+        <span data-i18n="wl.h1">Sé el</span><br>
+        <span data-i18n="wl.h2">primero</span><br>
+        <span class="teal" data-i18n="wl.h3">en saber.</span>
+      </h2>
+      <p class="wl-p" data-r data-d="2" data-i18n="wl.p">
+        Las primeras personas de la lista entran gratis el primer mes, acceden a la beta privada y moldean el producto. Eso no es marketing — es la realidad.
+      </p>
+
+      <div class="wl-counter" data-r data-d="2">
+        <strong id="wlCount">0</strong> <span data-i18n="wl.counter">personas en lista · Tú puedes ser la siguiente</span>
+      </div>
+
+      <div class="wl-form-wrap" data-r data-d="3">
+        <div class="wl-form" id="wlForm">
+          <input
+            class="wl-input" type="email" id="wlEmail"
+            aria-label="Email para lista de espera"
+            placeholder="tu@email.com" autocomplete="email"
+          />
+          <button class="wl-btn" onclick="handleSignup('wlEmail')" data-i18n="wl.btn">Entrar →</button>
+        </div>
+        <div class="wl-success" id="wlSuccess">
+          ✓ <span data-i18n="wl.success">Estás dentro — te avisamos cuando abramos el acceso</span>
+        </div>
+      </div>
+      <p class="wl-note" data-r data-d="4" data-i18n="wl.note">Sin spam · Baja cuando quieras · 0 compromisos</p>
+
+      <!-- Admin preview (toggle) -->
+      <button
+        onclick="toggleList()"
+        style="margin-top:18px;font-family:var(--mono);font-size:10px;color:var(--tx4);letter-spacing:.1em;text-transform:uppercase;background:none;border:none;cursor:pointer;opacity:.5;hover:opacity:1"
+        data-i18n="wl.admin"
+      >Ver lista guardada →</button>
+      <div class="wl-list" id="wlListPreview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="nav-brand" style="pointer-events:none">
+          <svg viewBox="0 0 34 34" width="28" height="28">
+            <path d="M8 30L17 13M26 30L17 13M17 13V4" stroke="#00E5CC" stroke-width="3.8" stroke-linecap="round"/>
+            <polygon points="17,0 12,7 22,7" fill="#00E5CC"/>
+          </svg>
+          <span class="nav-wm" style="font-size:18px">gryn<em>.</em></span>
+        </div>
+        <p data-i18n="foot.brand">Nutrition intelligence para quien quiere hacer bien las cosas, rápido y sin sermones.</p>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.col1">Producto</h4>
+        <a href="#concepto" data-i18n="foot.l1a">El concepto</a>
+        <a href="#beneficios" data-i18n="foot.l1b">Beneficios</a>
+        <a href="#ahorro" data-i18n="foot.l1c">Ahorro</a>
+        <a href="#waitlist" data-i18n="foot.l1d">Lista de espera</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.col2">Empresa</h4>
+        <a href="#" data-i18n="foot.l2a">Sobre nosotros</a>
+        <a href="#" data-i18n="foot.l2b">Blog</a>
+        <a href="mailto:beta@gryn.app">beta@gryn.app</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="foot.col3">Legal</h4>
+        <a href="#" data-i18n="foot.l3a">Privacidad</a>
+        <a href="#" data-i18n="foot.l3b">Términos</a>
+        <a href="#" data-i18n="foot.l3c">Cookies</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="foot.copy">© 2025 Gryn Technologies SL · Todos los derechos reservados</span>
+      <div class="socials">
+        <a href="#" class="soc" aria-label="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" class="soc" aria-label="TikTok"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 106.34 6.34V8.75a8.19 8.19 0 004.78 1.52V6.84a4.85 4.85 0 01-1.01-.15z"/></svg></a>
+        <a href="#" class="soc" aria-label="X / Twitter"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" class="soc" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+   JAVASCRIPT
+═══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ══ i18n TRANSLATIONS ══════════════════════════════════════ */
+const T = {
+  es: {
+    'nav.concept':'Concepto','nav.benefits':'Beneficios','nav.savings':'Ahorro',
+    'nav.how':'Cómo funciona','nav.cta':'Lista de espera →',
+    'hero.badge':'BETA ABIERTA · LISTA DE ESPERA',
+    'hero.h1a':'El neobank','hero.h1b':'de tu carrito.',
+    'hero.h1c':'Tu salud, tu activo.',
+    'hero.sub':'Gryn analiza cada producto que compras, calcula un score nutricional real y te muestra cómo optimizar tu cesta — más salud, menos gasto.',
+    'hero.btn':'Acceso anticipado →',
+    'hero.meta':'Sin spam · Solo te avisamos cuando lancemos · Baja cuando quieras',
+    'ribbon.1':'ultraprocessados en el carrito medio español',
+    'ribbon.2':'aditivos autorizados en la UE',
+    'ribbon.3':'ahorro anual potencial optimizando el carrito',
+    'ribbon.4':'de los adultos no interpreta bien las etiquetas',
+    'ribbon.5':'categoría = mayor riesgo crónico documentado',
+    'ribbon.6':'del presupuesto familiar va a comida procesada',
+    'neobank.eyebrow':'El concepto',
+    'neobank.h1':'Tu cuerpo es','neobank.h2':'el activo más','neobank.h3':'valioso que tienes.',
+    'neobank.p1':'Los mejores inversores gestionan su portfolio con datos, estrategia y ciencia. Gryn hace lo mismo con tu alimentación. Trátala como lo que es: el activo biológico que determina tu energía, longevidad y rendimiento.',
+    'neobank.p2':'No es una app de dietas. No hay planes, no hay restricciones, no hay culpa. Solo inteligencia nutricional en tiempo real — como tener un CFO para tu carrito.',
+    'neobank.m1':'Bases de datos científicas integradas','neobank.m2':'Para analizar cualquier producto',
+    'neobank.m3':'Score único multi-fuente por producto','neobank.m4':'Coste de la beta para los primeros accesos',
+    'dash.title':'ÍNDICE NUTRICIONAL','dash.status':'Saludable',
+    'dash.p1':'AOVE Hacendado 1L','dash.p2':'Alpro Avena 1L','dash.p3':'Refresco naranja',
+    'dash.swap':'Swap sugerido',
+    'feat.eyebrow':'Beneficios','feat.h':'Inteligencia real.\nResultados reales.',
+    'feat.p':'Sin planes rígidos, sin culpa. Solo datos precisos que te dan el control.',
+    'c1.label':'Scan inteligente','c1.h':'Apunta.\nEscanea.\nSabe.',
+    'c1.p':'Código de barras o foto del ticket: Gemini Vision analiza el contenido en segundos. Gryn identifica marca, composición y nivel de procesamiento sin que muevas un dedo.',
+    'c2.label':'Score científico','c2.h':'Un número.\nToda la verdad.',
+    'c2.p':'OFF + USDA + CIQUAL. No un semáforo de marketing — ciencia de verdad en un score de 0 a 100.',
+    'c3.label':'Optimización de gasto','c3.h':'Más salud.\nMenos coste.',
+    'c3.p':'Alternativas mejores y más baratas cerca de ti. Comer bien no es un privilegio — es una decisión informada.',
+    'c4.label':'Precios de comunidad','c4.h':'Tu barrio.\nTu precio.\nTu ventaja.',
+    'c4.p':'Precios y alternativas de usuarios reales a menos de 2km. Comparativa de cestas de tu comunidad. Inteligencia colectiva al servicio de tu carrito.',
+    'c5.label':'Privacidad total','c5.h':'Tus datos.\nSolo tuyos.',
+    'c5.p':'No vendemos información a marcas ni supermercados. Gryn cobra a ti — no por ti. Sin publicidad, sin compromisos ocultos.',
+    'c6.label':'Diseñado para tu ritmo','c6.h':'30 segundos\nde decisión.',
+    'c6.p':'Gen Z, Millennials, familias. Gryn cabe en el tiempo que tardas eligiendo entre dos productos en el pasillo.',
+    'sav.eyebrow':'El impacto real','sav.h':'Lo que cuesta\nno saber.',
+    'sav.p':'Cada carrito sin analizar es dinero mal invertido y salud comprometida. Gryn convierte esa opacidad en claridad.',
+    'sav.s1t':'Ahorro anual potencial','sav.s1d':'Optimizando 3 productos por semana hacia alternativas equivalentes de menor coste y mejor score.',
+    'sav.s2t':'Productos ultraprocesados','sav.s2d':'Del carrito medio español son NOVA 3-4. Cada punto de score ganado representa menos riesgo de enfermedad crónica.',
+    'sav.s3t':'Analfabetismo nutricional','sav.s3d':'De adultos europeos no interpreta correctamente la información nutricional. Gryn cierra esa brecha.',
+    'how.eyebrow':'Cómo funciona','how.h':'Tres pasos.\nUn veredicto.',
+    'how.p':'Sin formularios, sin diarios de comida, sin pesarte. Solo apunta y dispara.',
+    'how.s1h':'Escanea','how.s1p':'Abre Gryn y apunta la cámara al código de barras de cualquier producto o haz una foto a tu ticket del super. Gemini Vision detecta automáticamente qué tipo de contenido es.',
+    'how.s2h':'Analiza','how.s2p':'Cruzamos con Open Food Facts, USDA FoodData y CIQUAL/ANSES. Calculamos el Score Gryn único: Nutriscore + grupo NOVA + densidad de aditivos en un solo número honesto.',
+    'how.s3h':'Actúa','how.s3p':'Alternativas mejores y más baratas cerca de ti. Comparativa de precios de la comunidad. Visualización de cómo mejora tu índice con cada cambio. Tú decides.',
+    'wl.eyebrow':'Lista de espera','wl.h1':'Sé el','wl.h2':'primero','wl.h3':'en saber.',
+    'wl.p':'Las primeras personas de la lista entran gratis el primer mes, acceden a la beta privada y moldean el producto. Eso no es marketing — es la realidad.',
+    'wl.counter':'personas en lista · Tú puedes ser la siguiente',
+    'wl.btn':'Entrar →','wl.success':'Estás dentro — te avisamos cuando abramos el acceso',
+    'wl.note':'Sin spam · Baja cuando quieras · 0 compromisos','wl.admin':'Ver lista guardada →',
+    'foot.brand':'Nutrition intelligence para quien quiere hacer bien las cosas, rápido y sin sermones.',
+    'foot.col1':'Producto','foot.col2':'Empresa','foot.col3':'Legal',
+    'foot.l1a':'El concepto','foot.l1b':'Beneficios','foot.l1c':'Ahorro','foot.l1d':'Lista de espera',
+    'foot.l2a':'Sobre nosotros','foot.l2b':'Blog',
+    'foot.l3a':'Privacidad','foot.l3b':'Términos','foot.l3c':'Cookies',
+    'foot.copy':'© 2025 Gryn Technologies SL · Todos los derechos reservados',
+    'toast.ok':'✓ En lista de espera — te avisamos primero',
+    'toast.dup':'Ya estás en la lista 👋',
+    'toast.err':'Introduce un email válido',
+  },
+  en: {
+    'nav.concept':'Concept','nav.benefits':'Benefits','nav.savings':'Savings',
+    'nav.how':'How it works','nav.cta':'Join waitlist →',
+    'hero.badge':'OPEN BETA · WAITLIST OPEN',
+    'hero.h1a':'The neobank','hero.h1b':'of your cart.',
+    'hero.h1c':'Your health, your asset.',
+    'hero.sub':'Gryn analyzes every product you buy, calculates a real nutrition score, and shows you how to optimize your basket — more health, less spend.',
+    'hero.btn':'Early access →',
+    'hero.meta':'No spam · We only notify you at launch · Unsubscribe anytime',
+    'ribbon.1':'ultra-processed products in the average Spanish cart',
+    'ribbon.2':'additives authorized in the EU',
+    'ribbon.3':'annual savings potential optimizing your cart',
+    'ribbon.4':'of adults misread nutritional labels',
+    'ribbon.5':'category = highest documented chronic disease risk',
+    'ribbon.6':'of family budget goes to processed food',
+    'neobank.eyebrow':'The concept',
+    'neobank.h1':'Your body is','neobank.h2':'the most valuable','neobank.h3':'asset you own.',
+    'neobank.p1':'The best investors manage their portfolio with data, strategy, and science. Gryn does the same with your nutrition. Treat it for what it is: the biological asset that determines your energy, longevity, and performance.',
+    'neobank.p2':'Not a diet app. No plans, no restrictions, no guilt. Just real-time nutrition intelligence — like having a CFO for your grocery cart.',
+    'neobank.m1':'Scientific databases integrated','neobank.m2':'To analyze any product',
+    'neobank.m3':'Unique multi-source score per product','neobank.m4':'Cost of beta for early access',
+    'dash.title':'NUTRITION INDEX','dash.status':'Healthy',
+    'dash.p1':'Hacendado EVOO 1L','dash.p2':'Alpro Oat Drink 1L','dash.p3':'Orange soft drink',
+    'dash.swap':'Suggested swap',
+    'feat.eyebrow':'Benefits','feat.h':'Real intelligence.\nReal results.',
+    'feat.p':'No rigid plans, no guilt. Just precise data that gives you control.',
+    'c1.label':'Smart scan','c1.h':'Point.\nScan.\nKnow.',
+    'c1.p':'Barcode or ticket photo: Gemini Vision analyzes the content in seconds. Gryn identifies brand, composition and processing level without any extra effort.',
+    'c2.label':'Scientific score','c2.h':'One number.\nThe whole truth.',
+    'c2.p':'OFF + USDA + CIQUAL. Not a marketing traffic light — real science in a 0-to-100 score.',
+    'c3.label':'Spend optimization','c3.h':'More health.\nLess cost.',
+    'c3.p':'Better and cheaper alternatives near you. Eating well is not a privilege — it\'s an informed choice.',
+    'c4.label':'Community pricing','c4.h':'Your neighborhood.\nYour price.\nYour edge.',
+    'c4.p':'Prices and alternatives from real users within 2km. Cart comparisons from your community. Collective intelligence for your basket.',
+    'c5.label':'Full privacy','c5.h':'Your data.\nYours only.',
+    'c5.p':'We don\'t sell your information to brands or supermarkets. Gryn charges you — not for you. No ads, no hidden commitments.',
+    'c6.label':'Built for your pace','c6.h':'30 seconds\nto decide.',
+    'c6.p':'Gen Z, Millennials, families. Gryn fits in the time it takes to choose between two products in the aisle.',
+    'sav.eyebrow':'The real impact','sav.h':'The cost of\nnot knowing.',
+    'sav.p':'Every unanalyzed cart is money badly invested and health compromised. Gryn turns that opacity into clarity.',
+    'sav.s1t':'Annual savings potential','sav.s1d':'Optimizing 3 products per week toward equivalent lower-cost, better-scored alternatives.',
+    'sav.s2t':'Ultra-processed products','sav.s2d':'Of the average Spanish cart are NOVA 3-4. Every score point gained means lower chronic disease risk.',
+    'sav.s3t':'Nutritional illiteracy','sav.s3d':'Of European adults misread nutritional information. Gryn closes that gap.',
+    'how.eyebrow':'How it works','how.h':'Three steps.\nOne verdict.',
+    'how.p':'No forms, no food journals, no weighing yourself. Just point and shoot.',
+    'how.s1h':'Scan','how.s1p':'Open Gryn and point the camera at a barcode or take a photo of your grocery receipt. Gemini Vision automatically detects what type of content it is.',
+    'how.s2h':'Analyze','how.s2p':'We cross-reference Open Food Facts, USDA FoodData, and CIQUAL/ANSES. We calculate the unique Gryn Score: Nutriscore + NOVA group + additive density in one honest number.',
+    'how.s3h':'Act','how.s3p':'Better and cheaper alternatives near you. Community price comparison. Visualization of how your index improves with each change. You decide.',
+    'wl.eyebrow':'Waitlist','wl.h1':'Be the','wl.h2':'first','wl.h3':'to know.',
+    'wl.p':'The first people on the list get the first month free, access to the private beta, and shape the product. That\'s not marketing — it\'s reality.',
+    'wl.counter':'people on list · You can be next',
+    'wl.btn':'Join →','wl.success':'You\'re in — we\'ll notify you when we open access',
+    'wl.note':'No spam · Unsubscribe anytime · 0 commitments','wl.admin':'View saved list →',
+    'foot.brand':'Nutrition intelligence for people who want to do things right, fast and without lectures.',
+    'foot.col1':'Product','foot.col2':'Company','foot.col3':'Legal',
+    'foot.l1a':'The concept','foot.l1b':'Benefits','foot.l1c':'Savings','foot.l1d':'Waitlist',
+    'foot.l2a':'About us','foot.l2b':'Blog',
+    'foot.l3a':'Privacy','foot.l3b':'Terms','foot.l3c':'Cookies',
+    'foot.copy':'© 2025 Gryn Technologies SL · All rights reserved',
+    'toast.ok':'✓ On the waitlist — you\'ll hear first',
+    'toast.dup':'You\'re already on the list 👋',
+    'toast.err':'Please enter a valid email',
+  }
+};
+
+/* ══ CURRENT LANG ══════════════════════════════════════ */
+let currentLang = localStorage.getItem('gryn_lang') || 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('gryn_lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('data-lang', lang);
+
+  // Update all translatable elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[lang] && T[lang][key]) el.textContent = T[lang][key];
+  });
+
+  // Update lang buttons
+  document.querySelectorAll('[data-lang-btn]').forEach(btn => {
+    const isActive = btn.getAttribute('data-lang-btn') === lang;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
+  });
+
+  // Update counter
+  updateCounter();
+}
+
+/* ══ EMAIL STORAGE ══════════════════════════════════════ */
+const STORAGE_KEY = 'gryn_waitlist';
+
+function getList() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  } catch { return []; }
+}
+
+function saveEmail(email) {
+  const list = getList();
+  const ts = new Date().toISOString();
+  if (list.find(e => e.email === email)) return 'dup';
+  list.push({ email, ts, lang: currentLang });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  return 'ok';
+}
+
+function updateCounter() {
+  const count = getList().length;
+  const el = document.getElementById('wlCount');
+  if (el) el.textContent = count;
+}
+
+function toggleList() {
+  const el = document.getElementById('wlListPreview');
+  if (!el) return;
+  const list = getList();
+  if (!el.classList.contains('show')) {
+    el.classList.add('show');
+    el.innerHTML = list.length === 0
+      ? '<em style="color:var(--tx4)">Lista vacía</em>'
+      : list.map((e, i) =>
+          `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);color:var(--tx2)">`+
+          `<strong style="color:var(--teal);margin-right:8px">#${i+1}</strong>${e.email} `+
+          `<span style="color:var(--tx4)">${e.ts.slice(0,16).replace('T',' ')} · ${e.lang||'es'}</span></div>`
+        ).join('');
+  } else {
+    el.classList.remove('show');
+  }
+}
+
+/* ══ SIGNUP ══════════════════════════════════════════════ */
+const emailRE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function handleSignup(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const email = input.value.trim().toLowerCase();
+
+  if (!emailRE.test(email)) {
+    showToast(T[currentLang]['toast.err']);
+    input.style.borderBottom = '2px solid #FF5A5A';
+    input.focus();
+    setTimeout(() => input.style.borderBottom = '', 2500);
+    return;
+  }
+
+  const result = saveEmail(email);
+  input.value = '';
+  input.style.borderBottom = '';
+  updateCounter();
+
+  if (result === 'dup') {
+    showToast(T[currentLang]['toast.dup']);
+    return;
+  }
+
+  // Show success state for waitlist form
+  if (inputId === 'wlEmail') {
+    const form = document.getElementById('wlForm');
+    const ok   = document.getElementById('wlSuccess');
+    if (form) form.style.display = 'none';
+    if (ok) { ok.style.display = 'block'; ok.querySelector('[data-i18n]') && setLang(currentLang); }
+  }
+
+  showToast(T[currentLang]['toast.ok']);
+
+  // Analytics hook (production: replace with real endpoint)
+  try {
+    fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, lang: currentLang, ts: new Date().toISOString() })
+    }).catch(() => {/* offline — localStorage is source of truth */});
+  } catch(e) {}
+}
+
+/* ══ TOAST ═══════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.classList.add('show');
+  toastTimer = setTimeout(() => t.classList.remove('show'), 4200);
+}
+
+/* ══ NAV SCROLL ═══════════════════════════════════════════ */
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('solid', window.scrollY > 56);
+}, { passive: true });
+
+/* ══ REVEAL ON SCROLL ════════════════════════════════════ */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); revObs.unobserve(e.target); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -44px 0px' });
+document.querySelectorAll('[data-r]').forEach(el => revObs.observe(el));
+
+/* ══ FLOATING PARTICLES ═══════════════════════════════════ */
+(function spawnParticles() {
+  const container = document.getElementById('particles');
+  if (!container) return;
+  const sizes = [2, 3, 4, 3, 2, 2, 4];
+  const dur = [18, 22, 26, 30, 24, 20, 28];
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const s = sizes[i % sizes.length];
+    const d = dur[i % dur.length];
+    p.style.cssText = [
+      `width:${s}px`, `height:${s}px`,
+      `left:${Math.random()*100}%`,
+      `animation-duration:${d}s`,
+      `animation-delay:${-(Math.random()*d)}s`,
+      `opacity:${0.2 + Math.random()*0.4}`,
+    ].join(';');
+    container.appendChild(p);
+  }
+})();
+
+/* ══ SMOOTH SCROLL ═══════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+/* ══ ENTER KEY ON INPUTS ════════════════════════════════ */
+['heroEmail', 'wlEmail'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') handleSignup(id); });
+});
+
+/* ══ COUNT-UP ANIMATION ═════════════════════════════════════
+   Uses IntersectionObserver — fires once when element enters
+   viewport. Duration 1500ms, easing matches Gryn motion token
+   (600ms reveal base + stagger). SVG ring score animated separately.
+═══════════════════════════════════════════════════════════ */
+(function initCountUp() {
+  // easeOutExpo — matches --ease token feel
+  function easeOutExpo(t) {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  function animateValue(el, from, to, duration) {
+    let startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutExpo(progress);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = to; // ensure exact final value
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Observe all .count-up elements
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.getAttribute('data-target'), 10);
+      if (isNaN(target)) return;
+      animateValue(el, 0, target, 1500);
+      countObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.count-up[data-target]').forEach(el => {
+    el.textContent = '0';
+    countObs.observe(el);
+  });
+
+  // SVG ring score: animate the text node + stroke-dasharray
+  const ringText = document.getElementById('dashRingScore');
+  if (ringText) {
+    const ringStroke = ringText.previousElementSibling; // the teal circle
+    const totalCirc = 239; // 2π × 38 ≈ 239
+    const targetScore = 78;
+    const targetDash = (targetScore / 100) * totalCirc;
+
+    // Set initial state
+    if (ringStroke) ringStroke.setAttribute('stroke-dasharray', '0 ' + totalCirc);
+
+    const ringObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        // animate text
+        animateValue(ringText, 0, targetScore, 1500);
+        // animate dasharray in sync
+        if (ringStroke) {
+          let startTime = null;
+          function stepRing(ts) {
+            if (!startTime) startTime = ts;
+            const p = Math.min((ts - startTime) / 1500, 1);
+            const e = easeOutExpo(p);
+            const d = e * targetDash;
+            ringStroke.setAttribute('stroke-dasharray', d.toFixed(2) + ' ' + totalCirc);
+            if (p < 1) requestAnimationFrame(stepRing);
+          }
+          requestAnimationFrame(stepRing);
+        }
+        ringObs.unobserve(entry.target);
+      });
+    }, { threshold: 0.4 });
+
+    ringObs.observe(ringText.closest('svg') || ringText.parentElement);
+  }
+})();
+
+/* ══ INIT ════════════════════════════════════════════════ */
+setLang(currentLang);
+</script>
+</body>
+</html>
